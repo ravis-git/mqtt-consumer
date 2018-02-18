@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# generate an executable jar
+# ./gradlew clean build
+
+# for development, use the minikube docker settings for the docker deamon to publish to the minikube registry
+eval $(minikube docker-env)
+
+# build & tag the app image -- Add the image to the docker registry
+docker build -f src/devops/app.Dockerfile -t localhost:5000/mqtt-consumer .
+#docker tag mqtt-consumer localhost:5000/mqtt-consumer
+docker push localhost:5000/mqtt-consumer
+#docker rmi mqtt-consumer
+
+# build and tag mosquitto image - Add to the shared docker registry
+docker build --no-cache -f src/devops/mosquitto.Dockerfile -t localhost:5000/mosquitto .
+docker push localhost:5000/mosquitto
+
+kubectl create -f src/devops/mqtt-consumer-pod.yml
+#kubectl create -f src/devops/mqtt-consumer-pod.yml
+
