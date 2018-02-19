@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.5.8.RELEASE'
+		springBootVersion = '1.5.10.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -11,7 +11,6 @@ buildscript {
 }
 
 apply plugin: 'groovy'
-apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 group = 'com.example'
@@ -22,17 +21,32 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
 	compile(
        'org.springframework.boot:spring-boot-starter',
        'org.springframework.boot:spring-boot-starter-jersey',
-       'org.springframework.boot:spring-boot-devtools',
        'org.codehaus.groovy:groovy-json:2.4.12',
 
        // eclipse paho for M2M (MQTT)
 	   'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
 	)
-	compile('org.codehaus.groovy:groovy')
+	compile('org.codehaus.groovy:groovy',
+            'org.springframework.boot:spring-boot-devtools'
+    )
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+allprojects {
+    apply plugin: 'idea'
+    idea {
+        module {
+            outputDir file('build/classes/main')
+            testOutputDir file('build/classes/test')
+        }
+    }
+    if(project.convention.findPlugin(JavaPluginConvention)) {
+        // Change the output directory for the main and test source sets back to the old path
+        sourceSets.main.output.classesDir = new File(buildDir, "classes/main")
+        sourceSets.test.output.classesDir = new File(buildDir, "classes/test")
+    }
 }

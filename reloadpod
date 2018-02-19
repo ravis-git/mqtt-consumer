@@ -17,5 +17,5 @@ docker build --no-cache -f src/devops/mosquitto.Dockerfile -t localhost:5000/mos
 docker push localhost:5000/mosquitto
 
 kubectl create -f src/devops/mqtt-consumer-pod.yml
-#kubectl create -f src/devops/mqtt-consumer-pod.yml
+#kubectl create -f src/devops/mqtt.consumer.pod.yml
 

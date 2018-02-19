@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-broker
+  labels:
+    srvc: mosquitto-v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      srvc: mosquitto-v1
+  template:
+    metadata:
+      labels:
+        srvc: mosquitto-v1
+    spec:
+      containers:
+        - name: mosquitto-v1
+          image: localhost:5000/mosquitto
+          ports:
+            - containerPort: 1883
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-consumer
+  labels:
+    srvs: spring-mqtt-consumer-v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      srvs: spring-mqtt-consumer-v1
+  template:
+    metadata:
+      labels:
+        srvs: spring-mqtt-consumer-v1
+    spec:
+      containers:
+        - name: mqtt-consumer
+          image: localhost:5000/mqtt-consumer
+          ports:
+            - containerPort: 8080

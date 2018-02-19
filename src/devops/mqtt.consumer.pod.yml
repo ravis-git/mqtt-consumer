@@ -10,7 +10,3 @@ spec:
       image: localhost:5000/mqtt-consumer
       ports:
         - containerPort: 8080
-    - name: mqtt-broker
-      image: localhost:5000/mosquitto
-      ports:
-        - containerPort: 1883
